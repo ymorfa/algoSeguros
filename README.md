@@ -4,26 +4,15 @@
 
 ```bash
 .
-├── config                      
-│   ├── main.yaml                   # Main configuration file
-│   ├── model                       # Configurations for training model
-│   │   ├── model1.yaml             # First variation of parameters to train model
-│   │   └── model2.yaml             # Second variation of parameters to train model
-│   └── process                     # Configurations for processing data
-│       ├── process1.yaml           # First variation of parameters to process data
-│       └── process2.yaml           # Second variation of parameters to process data
-├── data            
+│── data            
 │   ├── final                       # data after training the model
 │   ├── processed                   # data after processing
 │   └── raw                         # raw data
-├── docs                            # documentation for your project
+├── docs                            # documentation
 ├── .gitignore                      # ignore files that cannot commit to Git
-├── Makefile                        # store useful commands to set up the environment
 ├── models                          # store models
 ├── notebooks                       # store notebooks
-├── pyproject.toml                  # Configure black
-
-├── README.md                       # describe your project
+├── README.md                       # describe the project
 ├── src                             # store source code
 │   ├── __init__.py                 # make src a Python module 
 │   ├── process.py                  # process data before training model
