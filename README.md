@@ -1,11 +1,5 @@
 # AlgoSeguros
 
-## Tools used in this project
-* [hydra](https://hydra.cc/): Manage configuration files - [article](https://mathdatasimplified.com/stop-hard-coding-in-a-data-science-project-use-configuration-files-instead/)
-* [pdoc](https://github.com/pdoc3/pdoc): Automatically create an API documentation for your project
-* [pre-commit plugins](https://pre-commit.com/): Automate code reviewing formatting
-
-
 ## Project Structure
 
 ```bash
@@ -41,77 +35,16 @@
 ```
 
 ## Set up the environment
-
-
 1. Create the virtual environment:
 ```bash
-python3 -m venv venv
+python3.8 -m venv .venv
 ```
-2. Activate the virtual environment:
+2. Activate the virtual environment
 
-- For Linux/MacOS:
-```bash
-source venv/bin/activate
-```
-- For Command Prompt:
-```bash
-.\venv\Scripts\activate
-```
 3. Install dependencies:
-- To install all dependencies, run:
-```bash
-pip install -r requirements-dev.txt
-```
-- To install only production dependencies, run:
+
+- To install necesary dependencies, run:
 ```bash
 pip install -r requirements.txt
 ```
-- To install a new package, run:
-```bash
-pip install <package-name>
-```
 
-
-## View and alter configurations
-To view the configurations associated with a Pythons script, run the following command:
-```bash
-python src/process.py --help
-```
-Output:
-```yaml
-process is powered by Hydra.
-
-== Configuration groups ==
-Compose your configuration from those groups (group=option)
-
-model: model1, model2
-process: process1, process2
-
-
-== Config ==
-Override anything in the config (foo.bar=value)
-
-process:
-  use_columns:
-  - col1
-  - col2
-model:
-  name: model1
-data:
-  raw: data/raw/sample.csv
-  processed: data/processed/processed.csv
-  final: data/final/final.csv
-```
-
-To alter the configurations associated with a Python script from the command line, run the following:
-```bash
-python src/process.py data.raw=sample2.csv
-```
-
-## Auto-generate API documentation
-
-To auto-generate API document for your project, run:
-
-```bash
-make docs
-```
