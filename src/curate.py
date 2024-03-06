@@ -1,5 +1,6 @@
 import findspark
 from pyspark.sql import SparkSession
+from pyspark.conf import SparkConf
 from pyspark.sql.functions import col, explode, array, lit, concat
 
 import os, sys
@@ -11,11 +12,18 @@ data_path = os.path.join(root_path, 'data')
 
 from src.tools import get_mes_numerico
 
+
+
 if __name__ == "__main__":
 
     print(">>> 0. Inicializando Spark")
     findspark.init()
+    conf = SparkConf()
+    conf.set("spark.driver.memory", "4g")  # Establece la memoria para el driver
+    conf.set("spark.executor.memory", "4g")  # Establece la memoria para los ejecutores
+
     spark = SparkSession.builder.appName("Exploración de Datos AlgoSeguros") \
+            .config(conf=conf) \
             .getOrCreate()
     print('>>> Terminado \n')
     
@@ -52,8 +60,6 @@ if __name__ == "__main__":
         explode(array(*[array([lit(mes), col(mes)]) for mes in meses])).alias("mes_incidencia"))
     
     df_reestructurado = df_reestructurado.select(
-        col("año"), 
-        col("mes_incidencia")[0].alias('mes'),
         col("clave_ent"),
         col("entidad"),
         col("cve_municipio"),
@@ -66,6 +72,8 @@ if __name__ == "__main__":
     print('>>> Terminado \n')
 
     print('>>> Guardando Datos')
-    df = df.toPandas()
+    #df_reestructurado.write.options(encoding = 'utf-8', delimiter=',').format("csv").mode('overwrite').save(os.path.join(data_path, 'processed', 'curated.csv'))
+
+    df = df_reestructurado.toPandas()
     df.to_csv(os.path.join(data_path, 'processed', 'curated.csv'), index=False,  encoding="utf-8")
-    
+    spark.stop()

@@ -13,14 +13,11 @@
 ├── models                          # store models
 ├── notebooks                       # store notebooks
 ├── README.md                       # describe the project
-├── src                             # store source code
-│   ├── __init__.py                 # make src a Python module 
-│   ├── process.py                  # process data before training model
-│   └── train_model.py              # train model
-└── tests                           # store tests
-    ├── __init__.py                 # make tests a Python module 
-    ├── test_process.py             # test functions for process.py
-    └── test_train_model.py         # test functions for train_model.py
+└── src                             # store source code
+    ├── __init__.py                 # make src a Python module 
+    ├── process.py                  # process data before training model
+    └── train_model.py              # train model
+
 ```
 
 ## Set up the environment
