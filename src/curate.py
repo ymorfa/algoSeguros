@@ -3,7 +3,7 @@ from pyspark.sql import SparkSession
 from pyspark.conf import SparkConf
 from pyspark.sql.functions import col, explode, array, lit, concat
 
-import os, sys
+import os, sys, json
 
 
 root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -71,6 +71,11 @@ if __name__ == "__main__":
         concat(col("año"), lit("-"), get_mes_numerico(col("mes_incidencia")[0])).alias("mes-año"),
         col("mes_incidencia")[1].alias("incidencias")
     )
+
+    clave_ent_dict = dict(df_reestructurado.select('clave_ent', 'entidad').distinct().collect())
+    clave_municipio_dict = dict(df_reestructurado.select('cve_municipio', 'municipio').distinct().collect())
+    df_reestructurado = df_reestructurado.drop(col('entidad'), col('municipio'))
+    df_reestructurado = df_reestructurado.withColumn('codigo_lugar', concat(df_reestructurado['cve_municipio'], lit('-'), df_reestructurado['clave_ent']))
     df_reestructurado = df_reestructurado.drop(col('clave_ent'), col('cve_municipio'))
     print('>>> Terminado \n')
 
@@ -86,3 +91,24 @@ if __name__ == "__main__":
     df = df_filtered.toPandas()
     df.to_csv(os.path.join(data_path, 'processed', 'curated.csv'), index=False,  encoding="utf-8")
     spark.stop()
+
+    json_file_path = os.path.join(data_path, 'parameters.json')
+    
+    data_to_save = {
+        "calve_entidad": clave_ent_dict,
+        "clave_municipo": clave_municipio_dict
+    }
+
+    if not os.path.exists(json_file_path): 
+        with open(json_file_path, 'w') as json_file:
+            json.dump(data_to_save, json_file, indent=4)
+    else:
+        with open(json_file_path, 'r') as json_file:
+            data = json.load(json_file)
+
+        for key, value in data_to_save.items():
+            data[key] = value
+    
+        with open(json_file_path, 'w') as json_file:
+            json.dump(data, json_file, indent=4)
+    print('>>> Terminado \n')
