@@ -46,7 +46,7 @@ if __name__ == "__main__":
     print('>>> Terminado \n')
 
 
-    print(">>> Reestructurando Datos")
+    print(">>> 4. Reestructurando Datos")
     meses = df.columns[7:] 
 
     df_reestructurado = df.select(
@@ -60,6 +60,8 @@ if __name__ == "__main__":
         explode(array(*[array([lit(mes), col(mes)]) for mes in meses])).alias("mes_incidencia"))
     
     df_reestructurado = df_reestructurado.select(
+        col("año"), 
+        col("mes_incidencia")[0].alias('mes'),
         col("clave_ent"),
         col("entidad"),
         col("cve_municipio"),
@@ -69,11 +71,18 @@ if __name__ == "__main__":
         concat(col("año"), lit("-"), get_mes_numerico(col("mes_incidencia")[0])).alias("mes-año"),
         col("mes_incidencia")[1].alias("incidencias")
     )
+    df_reestructurado = df_reestructurado.drop(col('clave_ent'), col('cve_municipio'))
     print('>>> Terminado \n')
 
-    print('>>> Guardando Datos')
+    print(">>> 5. Eliminando Registros Vacios")
+    df_filtered = df_reestructurado.filter(
+        (col('año') < 2024) | ((col('año') == 2024) & (col('mes') == 'enero'))
+    )
+    print('>>> Terminado \n')
+    
+    print('>>> 6. Guardando Datos')
     #df_reestructurado.write.options(encoding = 'utf-8', delimiter=',').format("csv").mode('overwrite').save(os.path.join(data_path, 'processed', 'curated.csv'))
 
-    df = df_reestructurado.toPandas()
+    df = df_filtered.toPandas()
     df.to_csv(os.path.join(data_path, 'processed', 'curated.csv'), index=False,  encoding="utf-8")
     spark.stop()
