@@ -20,17 +20,17 @@
 
 ```
 
-## Set up the environment
-1. Create the virtual environment:
+## Configura el ambiente
+1. Crea un nuevo ambiente con el comando:
+
 ```bash
 python3.8 -m venv .venv
 ```
-2. Activate the virtual environment
+2. Activa el ambiente
 
-3. Install dependencies:
+3. Intala las dependencias necesarias usando
 
-- To install necesary dependencies, run:
 ```bash
 pip install -r requirements.txt
 ```
-
+4. 
